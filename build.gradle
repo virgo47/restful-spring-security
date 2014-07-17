@@ -12,7 +12,8 @@ configurations.all {
 		if (details.requested.group == 'org.apache.tomcat.embed') {
 //			details.useVersion '8.0.9' TODO throws Exception in thread "main" java.lang.NoSuchMethodError: org.apache.catalina.core.StandardContext.loadOnStartup([Lorg/apache/catalina/Container;)V
 			// see https://github.com/spring-projects/spring-boot/issues/1148 for more
-			details.useVersion '8.0.8' // reportedly last 8.x beta version :-)
+//			details.useVersion '8.0.8' // reportedly last 8.x beta version :-)
+			details.useVersion '7.0.54' // currently tested on this version
 		}
 	}
 }
@@ -20,9 +21,13 @@ configurations.all {
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
 
-archivesBaseName = 'xxx'
+archivesBaseName = 'respsec'
+
+// http://docs.spring.io/spring-boot/docs/1.0.0.BUILD-SNAPSHOT/reference/html/build-tool-plugins-gradle-plugin.html
+apply plugin: 'spring-boot'
+//jar.enabled = false
+bootRepackage.enabled = false
 
 repositories {
 //	maven { url 'https://repository.jboss.org/nexus/content/groups/public-jboss' }
@@ -53,4 +58,11 @@ task deployToLocalWildFly(type: Copy) {
 
 	from 'build/libs'
 	into 'c:/work/appservers/wildfly-8.1.0.Final/standalone/deployments/'
+}
+
+task deployToTomcat7(type: Copy) {
+	it.dependsOn war
+
+	from 'build/libs'
+	into 'c:/work/appservers/apache-tomcat-7.0.54/webapps/'
 }

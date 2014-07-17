@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bean:beans
+	xmlns:bean="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.MyUserDetailService"/>
+
+	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.MyAuthenticationFilter"/>
+
+	<http realm="Protected API"
+		use-expressions="true"
+		create-session="stateless"
+		entry-point-ref="unauthorizedEntryPoint"
+		authentication-manager-ref="restAuthenticationManager">
+
+		<custom-filter ref="restAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
+
+		<intercept-url pattern="/*" access="permitAll"/>
+		<intercept-url pattern="/secure/**" access="hasRole('ROLE_USER')"/>
+	</http>
+
+	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.security.UnauthorizedEntryPoint"/>
+
+	<authentication-manager id="restAuthenticationManager">
+		<authentication-provider user-service-ref="userDetailService">
+		</authentication-provider>
+	</authentication-manager>
+</bean:beans>

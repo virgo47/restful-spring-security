@@ -1,0 +1,9 @@
+<%@ page pageEncoding="UTF-8" session="false" %>
+
+<html>
+<title>RESTful Spring Security random</title>
+<meta charset="UTF-8">
+<body>
+<h1>RESTful Spring Security random JSP page</h1>
+</body>
+</html>
