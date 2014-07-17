@@ -8,9 +8,12 @@
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.MyUserDetailService"/>
+	<!-- TODO: doesn't work in MRC, maybe because it is different appcontext unreachable from root one? -->
+	<global-method-security secured-annotations="enabled"/>
 
-	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.MyAuthenticationFilter"/>
+	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.security.MyUserDetailService"/>
+
+	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.security.MyAuthenticationFilter"/>
 
 	<http realm="Protected API"
 		use-expressions="true"
@@ -21,7 +24,7 @@
 		<custom-filter ref="restAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
 
 		<intercept-url pattern="/*" access="permitAll"/>
-		<intercept-url pattern="/secure/**" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/secure/**" access="isFullyAuthenticated()"/>
 	</http>
 
 	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.security.UnauthorizedEntryPoint"/>

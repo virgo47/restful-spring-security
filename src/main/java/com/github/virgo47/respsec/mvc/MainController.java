@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * MainController.
+ * This controller is not part of RESTful API, but rather goes to normal JSP views.
  */
 @Controller
 public class MainController {
@@ -18,11 +18,11 @@ public class MainController {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("MainController.init with: " + applicationContext);
+		System.out.println(" *** MainController.init with: " + applicationContext);
 	}
 
 	@RequestMapping("/")
 	public String index() {
-		return "some";
+		return "index";
 	}
 }

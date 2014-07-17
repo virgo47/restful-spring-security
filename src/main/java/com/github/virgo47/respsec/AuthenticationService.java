@@ -1,5 +1,7 @@
 package com.github.virgo47.respsec;
 
+import com.github.virgo47.respsec.security.UserContext;
+
 import java.util.Map;
 
 /**

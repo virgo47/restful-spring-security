@@ -44,7 +44,10 @@
 
 	<servlet-mapping>
 		<servlet-name>mvc</servlet-name>
-		<!-- This cannot be /*, otherwise JSPs are not displayed correctly, e.g. http://localhost:8080/respsec/ -->
+		<!--
+		This cannot be /*, it must be bound to "default" servlet (/).
+		Otherwise JSPs are not displayed correctly, e.g. http://localhost:8080/respsec/
+		-->
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 </web-app>
