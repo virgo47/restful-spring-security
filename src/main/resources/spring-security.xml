@@ -2,6 +2,7 @@
 <bean:beans
 	xmlns:bean="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
 	xmlns="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
@@ -11,9 +12,10 @@
 	<!-- TODO: doesn't work in MRC, maybe because it is different appcontext unreachable from root one? -->
 	<global-method-security secured-annotations="enabled"/>
 
-	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.security.MyUserDetailService"/>
+	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.security.MyUseDetailsService"/>
 
-	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.security.MyAuthenticationFilter"/>
+	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.main.security.MyAuthenticationFilter"
+		c:logoutLink="/logout"/>
 
 	<http realm="Protected API"
 		use-expressions="true"
@@ -21,16 +23,26 @@
 		entry-point-ref="unauthorizedEntryPoint"
 		authentication-manager-ref="restAuthenticationManager">
 
+		<!--
+		This is not possible, because it causes:
+		DEBUG o.s.s.w.a.ExceptionTranslationFilter - Authentication exception occurred; redirecting to authentication entry point
+		org.springframework.security.authentication.AuthenticationCredentialsNotFoundException: An Authentication object was not found in the SecurityContext
+		-->
+		<!--<anonymous enabled="false"/>-->
 		<custom-filter ref="restAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
 
 		<intercept-url pattern="/*" access="permitAll"/>
 		<intercept-url pattern="/secure/**" access="isFullyAuthenticated()"/>
 	</http>
 
-	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.security.UnauthorizedEntryPoint"/>
+	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.main.security.UnauthorizedEntryPoint"/>
 
 	<authentication-manager id="restAuthenticationManager">
 		<authentication-provider user-service-ref="userDetailService">
+			<!--
+			Default password encoder is PlaintextPasswordEncoder, which fits with our hardcoded users.
+			Obviously not a good choice otherwise.
+			-->
 		</authentication-provider>
 	</authentication-manager>
 </bean:beans>

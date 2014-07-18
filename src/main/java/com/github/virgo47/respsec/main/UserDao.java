@@ -13,7 +13,9 @@ public class UserDao {
 			case "special":
 				return new User("special", "Special Expert", "special", "SPECIAL");
 			case "user1":
-				return new User("user1", "User Uno", "user1", "");
+				return new User("user1", "User Uno", "user1");
+			case "Aladdin":
+				return new User("Aladdin", "Aladdin", "open sesame");
 			default:
 				return null;
 		}

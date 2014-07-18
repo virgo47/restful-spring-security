@@ -1,4 +1,4 @@
-package com.github.virgo47.respsec.security;
+package com.github.virgo47.respsec.main.security;
 
 import com.github.virgo47.respsec.main.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class UserContext implements UserDetails {
 
@@ -53,5 +54,24 @@ public class UserContext implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return this == o
+			|| o != null && o instanceof UserContext
+			&& Objects.equals(user, ((UserContext) o).user);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(user);
+	}
+
+	@Override
+	public String toString() {
+		return "UserContext{" +
+			"user=" + user +
+			'}';
 	}
 }

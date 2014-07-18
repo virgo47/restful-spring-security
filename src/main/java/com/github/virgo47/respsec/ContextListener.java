@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+/** Added just for monitoring and debugging. */
 @WebListener
 public class ContextListener implements ServletContextListener, HttpSessionListener {
 
@@ -21,11 +22,11 @@ public class ContextListener implements ServletContextListener, HttpSessionListe
 
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
-		System.out.println(" *** ContextListener.sessionCreated");
+		System.out.println(" *** ContextListener.sessionCreated - NOT GOOD!");
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
-		System.out.println(" *** ContextListener.sessionDestroyed");
+		System.out.println(" *** ContextListener.sessionDestroyed - NOT GOOD!");
 	}
 }

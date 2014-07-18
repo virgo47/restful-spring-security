@@ -26,13 +26,10 @@ archivesBaseName = 'respsec'
 
 // http://docs.spring.io/spring-boot/docs/1.0.0.BUILD-SNAPSHOT/reference/html/build-tool-plugins-gradle-plugin.html
 apply plugin: 'spring-boot'
-//jar.enabled = false
+//jar.enabled = false // not sure how or when this is important
 bootRepackage.enabled = false
 
 repositories {
-//	maven { url 'https://repository.jboss.org/nexus/content/groups/public-jboss' }
-//	maven { url 'https://repository.jboss.org/nexus/content/repositories' }
-//	maven { url 'https://repository.jboss.org/nexus/content/repositories/thirdparty-releases' }
 	mavenCentral()
 }
 

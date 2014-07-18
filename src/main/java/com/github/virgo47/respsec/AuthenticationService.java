@@ -1,20 +1,20 @@
 package com.github.virgo47.respsec;
 
-import com.github.virgo47.respsec.security.UserContext;
-
 import java.util.Map;
 
-/**
- * Authenticates the user or checks valid token.
- *
- * TODO: How to encode token?
- */
+import com.github.virgo47.respsec.main.security.UserContext;
+
+/** Authenticates the user or checks valid token. */
 public interface AuthenticationService {
 
-	UserContext authenticate(String login, String password);
+	/** Authenticates the user and returns valid token. If anything fails, {@code null} is returned instead. */
+	String authenticate(String login, String password);
 
-	UserContext checkToken(String token);
+	boolean checkToken(String token);
 
 	/** This is only for debug purposes obviously. */
 	Map<String, UserContext> getValidUsers();
+
+	/** Logouts the user - token is invalidated/forgotten. */
+	void logout(String token);
 }

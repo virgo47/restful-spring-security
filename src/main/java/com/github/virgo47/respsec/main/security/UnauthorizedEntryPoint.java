@@ -1,4 +1,4 @@
-package com.github.virgo47.respsec.security;
+package com.github.virgo47.respsec.main.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -16,6 +16,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+		System.out.println(" *** UnauthorizedEntryPoint.commence: " + request.getRequestURI());
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	}
 }
