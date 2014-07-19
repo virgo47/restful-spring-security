@@ -9,13 +9,11 @@
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-	<!-- TODO: doesn't work in MRC, maybe because it is different appcontext unreachable from root one? -->
+	<!--
+	Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
+	Actually, we currently don't need this as we have on annotation outside of MVC.
+	-->
 	<global-method-security secured-annotations="enabled"/>
-
-	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.security.MyUseDetailsService"/>
-
-	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.main.security.MyAuthenticationFilter"
-		c:logoutLink="/logout"/>
 
 	<http realm="Protected API"
 		use-expressions="true"
@@ -24,7 +22,7 @@
 		authentication-manager-ref="restAuthenticationManager">
 
 		<!--
-		This is not possible, because it causes:
+		This is not easily possible, because it causes:
 		DEBUG o.s.s.w.a.ExceptionTranslationFilter - Authentication exception occurred; redirecting to authentication entry point
 		org.springframework.security.authentication.AuthenticationCredentialsNotFoundException: An Authentication object was not found in the SecurityContext
 		-->
@@ -37,6 +35,8 @@
 
 	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.main.security.UnauthorizedEntryPoint"/>
 
+	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.security.MyUseDetailsService"/>
+
 	<authentication-manager id="restAuthenticationManager">
 		<authentication-provider user-service-ref="userDetailService">
 			<!--
@@ -45,4 +45,10 @@
 			-->
 		</authentication-provider>
 	</authentication-manager>
+
+	<bean:bean id="authenticationService" class="com.github.virgo47.respsec.main.security.AuthenticationServiceImpl"
+		c:authenticationManager-ref="restAuthenticationManager"/>
+
+	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.main.security.MyAuthenticationFilter"
+		c:authenticationService-ref="authenticationService" c:logoutLink="/logout"/>
 </bean:beans>
