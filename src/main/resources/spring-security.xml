@@ -46,8 +46,10 @@
 		</authentication-provider>
 	</authentication-manager>
 
+	<bean:bean id="tokenManager" class="com.github.virgo47.respsec.main.security.TokenManagerSingle"/>
+
 	<bean:bean id="authenticationService" class="com.github.virgo47.respsec.main.security.AuthenticationServiceImpl"
-		c:authenticationManager-ref="restAuthenticationManager"/>
+		c:authenticationManager-ref="restAuthenticationManager" c:tokenManager-ref="tokenManager"/>
 
 	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.main.security.MyAuthenticationFilter"
 		c:authenticationService-ref="authenticationService" c:logoutLink="/logout"/>

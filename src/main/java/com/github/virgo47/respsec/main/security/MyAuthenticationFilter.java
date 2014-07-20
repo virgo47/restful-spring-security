@@ -97,9 +97,10 @@ public class MyAuthenticationFilter extends GenericFilterBean {
 	}
 
 	private void checkUsernameAndPassword(String username, String password, HttpServletResponse httpResponse) throws IOException {
-		String token = authenticationService.authenticate(username, password);
-		if (token != null) {
-			httpResponse.setHeader(HEADER_TOKEN, token);
+		TokenInfo tokenInfo = authenticationService.authenticate(username, password);
+		if (tokenInfo != null) {
+			httpResponse.setHeader(HEADER_TOKEN, tokenInfo.getToken());
+			// TODO set other token information possible: IP, ...
 		} else {
 			httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 		}

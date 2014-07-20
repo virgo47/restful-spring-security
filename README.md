@@ -8,7 +8,9 @@ Small test RESTful app with token based security. Its main reason is documentati
 * Following things are part of the security solution and must be configured:
 	* Security filter `MyAuthenticationFilter` takes care of HTTP and uses `AuthenticationService`
 	  that takes care of the "security business".
-	* `AuthenticationService`
+	* `AuthenticationService` that performs the main "security business". It uses Spring's `authenticationManager`
+	  to authenticate users and `TokenManager` implementation that offers variability in policy how tokens should work.
+	  There may b
 * Gradle build with Spring IO Platform "bill of materials" (but Spring Boot repackage is disabled).
 
 **Demo does not feature any front-end JavaScript. Sorry.** You have to use browser, preferably with something
@@ -24,7 +26,7 @@ Notes:
 * If `context:component-scan` is used in Spring configs, be sure to specify disjoint values for `base-package`.
   You don't want your Controllers to be picked by main appcontext or other way around. Separate JARs don't solve
   this as the resolution (initialization) is performed during runtime.
-* If login is repeated it is important to invalidate older tokens for the same user. Try http://localhost:8080/respsec/secure/allusers with
+* If login is repeated it is important to invalidate older tokens for the same user. Try http://localhost:8080/respsec/secure/mytokens with
   X-Username: admin; X-Password: admin - it should display just a single token. Other policies can be chosen
   implementing different `TokenManager`, you can store more tokens for a user, let him manage those, etc.
 
@@ -32,6 +34,7 @@ TODO:
 
 * How to invalidate tokens after some time? How to refresh them seamlessly? Should client expect renewed token in any response?
 * How to add more authorization mechanisms? Can we SSO to Windows Domain? Can we integrate something like [Waffle](https://github.com/dblock/waffle)?
+* mytokens
 
 Examples (assuming appserver on 8080 and application context `/respsec`):
 

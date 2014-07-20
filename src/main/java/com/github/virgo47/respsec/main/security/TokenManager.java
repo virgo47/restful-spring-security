@@ -1,50 +1,32 @@
 package com.github.virgo47.respsec.main.security;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Map;
 
 /**
  * Manages tokens - separated from {@link com.github.virgo47.respsec.AuthenticationService},
  * so we can implement and plug various policies.
  */
-public class TokenManager {
-
-	private Map<String, UserContext> validUsers = new HashMap<>();
+public interface TokenManager {
 
 	/**
-	 * This maps system users to tokens because equals/hashCode is delegated to User entity.
-	 * This can store either one token or list of them for each user, depending on what you want to do.
-	 * Here we store single token, which means, that any older tokens are invalidated.
+	 * Stores new token for the user. It may add it to token list or replace the old one.
+	 * Must return {@code null} if there is a token collision (however unlikely).
 	 */
-	private Map<UserContext, String> tokens = new HashMap<>();
+	TokenInfo createNewToken(UserContext userContext, String token);
 
-	public void storeNewToken(UserContext userContext, String token) {
-		removeUserContext(userContext);
+	/** Removes all tokens for user. */
+	void removeUserContext(UserContext userContext);
 
-		validUsers.put(token, userContext);
-		tokens.put(userContext, token);
-	}
+	/** Removes a single token. */
+	UserContext removeToken(String token);
 
-	public String removeUserContext(UserContext userContext) {
-		String token = tokens.remove(userContext);
-		validUsers.remove(token);
-		return token;
-	}
+	/** Returns user context for a token. */
+	UserContext getUserContext(String token);
 
-	public UserContext removeToken(String token) {
-		UserContext userContext = validUsers.remove(token);
-		if (userContext != null) {
-			tokens.remove(userContext);
-		}
-		return userContext;
-	}
+	/** Returns a collection with token information for a particular user. */
+	Collection<TokenInfo> getUserTokens(UserContext userContext);
 
-	public UserContext getUserContext(String token) {
-		return validUsers.get(token);
-	}
-
-	public Map<String, UserContext> getValidUsers() {
-		return Collections.unmodifiableMap(validUsers);
-	}
+	// TODO remove eventually?
+	Map<String, UserContext> getValidUsers();
 }

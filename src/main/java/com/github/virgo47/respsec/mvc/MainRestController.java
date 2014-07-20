@@ -1,11 +1,13 @@
 package com.github.virgo47.respsec.mvc;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 
 import com.github.virgo47.respsec.AuthenticationService;
+import com.github.virgo47.respsec.main.security.TokenInfo;
 import com.github.virgo47.respsec.main.security.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -70,6 +72,12 @@ public class MainRestController {
 	public String service1() {
 		System.out.println(" *** MainRestController.service1");
 		return "Any authorized user should have access.";
+	}
+
+	@RequestMapping("/secure/tokeninfo")
+	public Collection<TokenInfo> tokenInfo() {
+		System.out.println(" *** MainRestController.tokenInfo");
+		return authenticationService.getMyTokens();
 	}
 
 	// Spring annotation virtually equivalent with @RolesAllowed - except for...

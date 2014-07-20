@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.SecureRandom;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -25,10 +26,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private ApplicationContext applicationContext;
 
 	private final AuthenticationManager authenticationManager;
-	private final TokenManager tokenManager = new TokenManager();
+	private final TokenManager tokenManager;
 
-	public AuthenticationServiceImpl(AuthenticationManager authenticationManager) {
+	public AuthenticationServiceImpl(AuthenticationManager authenticationManager, TokenManager tokenManager) {
 		this.authenticationManager = authenticationManager;
+		this.tokenManager = tokenManager;
 	}
 
 	@PostConstruct
@@ -37,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	}
 
 	@Override
-	public String authenticate(String login, String password) {
+	public TokenInfo authenticate(String login, String password) {
 		System.out.println(" *** AuthenticationServiceImpl.authenticate");
 
 		// Here principal=username, credentials=password
@@ -50,7 +52,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 			if (authentication.getPrincipal() != null) {
 				UserContext userContext = (UserContext) authentication.getPrincipal();
 
-				return generateToken(userContext);
+				// this solves unlikely token collision - but if we keep generating the same token, it will get stuck :-)
+				TokenInfo tokenInfo = null;
+				while (tokenInfo == null) {
+					tokenInfo = generateToken(userContext);
+				}
+				return tokenInfo;
 			}
 		} catch (AuthenticationException e) {
 			System.out.println(" *** AuthenticationServiceImpl.authenticate - FAILED: " + e.toString());
@@ -58,12 +65,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		return null;
 	}
 
-	private String generateToken(UserContext userContext) {
+	// returns TokenInfo - null only if there is token collision, which is highly unlikely
+	private TokenInfo generateToken(UserContext userContext) {
 		byte[] tokenBytes = new byte[32];
 		new SecureRandom().nextBytes(tokenBytes);
 		String token = DatatypeConverter.printBase64Binary(tokenBytes);
-		tokenManager.storeNewToken(userContext, token);
-		return token;
+		return tokenManager.createNewToken(userContext, token);
 	}
 
 	@Override
@@ -76,7 +83,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		}
 
 		UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(
-			userContext.getUsername(), null, userContext.getAuthorities());
+			userContext, null, userContext.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(securityToken);
 
 		return true;
@@ -86,10 +93,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		return tokenManager.getValidUsers();
 	}
 
+	public Collection<TokenInfo> getMyTokens() {
+		UserContext userContext = (UserContext) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return tokenManager.getUserTokens(userContext);
+	}
+
 	@Override
 	public void logout(String token) {
 		UserContext logoutUser = tokenManager.removeToken(token);
 		System.out.println(" *** AuthenticationServiceImpl.logout: " + logoutUser);
-		SecurityContextHolder.getContext().setAuthentication(null);
+		SecurityContextHolder.clearContext();
 	}
 }
