@@ -11,7 +11,7 @@ public class UserDao {
 			case "admin":
 				return new User("admin", "Administrator", "admin", "ADMIN");
 			case "special":
-				return new User("special", "Special Expert", "special", "SPECIAL");
+				return new User("special", "Special Expert", "special", "ROLE_SPECIAL");
 			case "user1":
 				return new User("user1", "User Uno", "user1");
 			case "Aladdin":

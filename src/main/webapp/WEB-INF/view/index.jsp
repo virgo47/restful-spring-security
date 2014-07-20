@@ -13,7 +13,7 @@
 	<li><a href="random.jsp">directly accessible JSP page, phooey</a></li>
 	<li><a href="admin">role ADMIN only</a></li>
 	<li><a href="secure/service1">secure/service1 - authorized only</a></li>
-	<li><a href="secure/special">secure/special - SPECIAL role only</a></li>
+	<li><a href="secure/special">secure/special - ROLE_SPECIAL role only</a></li>
 	<li><a href="secure/allusers">secure/allusers - lists all active users - ADMIN role only</a></li>
 </ul>
 
