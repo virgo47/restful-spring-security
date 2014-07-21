@@ -1,3 +1,10 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+archivesBaseName = 'respsec'
+
 buildscript {
 	repositories {
 		mavenCentral()
@@ -17,12 +24,6 @@ configurations.all {
 		}
 	}
 }
-
-apply plugin: 'java'
-apply plugin: 'war'
-apply plugin: 'idea'
-
-archivesBaseName = 'respsec'
 
 // http://docs.spring.io/spring-boot/docs/1.0.0.BUILD-SNAPSHOT/reference/html/build-tool-plugins-gradle-plugin.html
 apply plugin: 'spring-boot'

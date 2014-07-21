@@ -1,3 +1,5 @@
+#!/bin/bash
+
 URL=http://localhost:8080/respsec
 CURL="curl -i -s -w '\n'"
 OK='grep -q "200 OK"'
