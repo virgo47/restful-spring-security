@@ -1,6 +1,7 @@
 package com.github.virgo47.respsec.main.restsec;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 
 import javax.servlet.FilterChain;
@@ -9,9 +10,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.web.filter.GenericFilterBean;
 
 /**
@@ -89,7 +90,7 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 		}
 
 		String base64 = tokenizer.nextToken();
-		String loginPassword = new String(DatatypeConverter.parseBase64Binary(base64));
+		String loginPassword = new String(Base64.decode(base64.getBytes(StandardCharsets.UTF_8)));
 
 		System.out.println("loginPassword = " + loginPassword);
 		tokenizer = new StringTokenizer(loginPassword, ":");

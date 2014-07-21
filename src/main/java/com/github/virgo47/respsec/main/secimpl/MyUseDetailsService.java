@@ -3,6 +3,7 @@ package com.github.virgo47.respsec.main.secimpl;
 import com.github.virgo47.respsec.main.domain.User;
 import com.github.virgo47.respsec.main.domain.UserDao;
 import com.github.virgo47.respsec.main.restsec.AuthenticationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;

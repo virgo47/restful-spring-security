@@ -3,6 +3,9 @@ package com.github.virgo47.respsec.main.secimpl;
 import com.github.virgo47.respsec.main.restsec.AuthenticationService;
 import com.github.virgo47.respsec.main.restsec.TokenInfo;
 import com.github.virgo47.respsec.main.restsec.TokenManager;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,11 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.security.SecureRandom;
-
-import javax.annotation.PostConstruct;
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * Service responsible for all around authentication, token checks, etc.
@@ -52,26 +50,16 @@ public class AuthenticationServiceDefault implements AuthenticationService {
 
 			if (authentication.getPrincipal() != null) {
 				UserDetails userContext = (UserDetails) authentication.getPrincipal();
-
-				// this solves unlikely token collision - but if we keep generating the same token, it will get stuck :-)
-				TokenInfo tokenInfo = null;
-				while (tokenInfo == null) {
-					tokenInfo = generateToken(userContext);
+				TokenInfo newToken = tokenManager.createNewToken(userContext);
+				if (newToken == null) {
+					return null;
 				}
-				return tokenInfo;
+				return newToken;
 			}
 		} catch (AuthenticationException e) {
 			System.out.println(" *** AuthenticationServiceImpl.authenticate - FAILED: " + e.toString());
 		}
 		return null;
-	}
-
-	// returns TokenInfo - null only if there is token collision, which is highly unlikely
-	private TokenInfo generateToken(UserDetails userDetails) {
-		byte[] tokenBytes = new byte[32];
-		new SecureRandom().nextBytes(tokenBytes);
-		String token = DatatypeConverter.printBase64Binary(tokenBytes);
-		return tokenManager.createNewToken(userDetails, token);
 	}
 
 	@Override

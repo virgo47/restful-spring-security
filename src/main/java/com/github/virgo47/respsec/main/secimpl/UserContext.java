@@ -1,10 +1,11 @@
 package com.github.virgo47.respsec.main.secimpl;
 
+import com.github.virgo47.respsec.main.domain.User;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
-import com.github.virgo47.respsec.main.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
