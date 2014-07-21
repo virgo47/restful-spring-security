@@ -6,14 +6,15 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 
-import com.github.virgo47.respsec.AuthenticationService;
-import com.github.virgo47.respsec.main.security.TokenInfo;
-import com.github.virgo47.respsec.main.security.UserContext;
+import com.github.virgo47.respsec.main.restsec.AuthenticationService;
+import com.github.virgo47.respsec.main.restsec.TokenInfo;
+import com.github.virgo47.respsec.main.restsec.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,9 @@ public class MainRestController {
 
 	@Autowired
 	private AuthenticationService authenticationService;
+
+	@Autowired
+	private TokenManager tokenManager;
 
 	@PostConstruct
 	public void init() {
@@ -74,10 +78,11 @@ public class MainRestController {
 		return "Any authorized user should have access.";
 	}
 
-	@RequestMapping("/secure/tokeninfo")
-	public Collection<TokenInfo> tokenInfo() {
-		System.out.println(" *** MainRestController.tokenInfo");
-		return authenticationService.getMyTokens();
+	@RequestMapping("/secure/mytokens")
+	public Collection<TokenInfo> myTokens() {
+		System.out.println(" *** MainRestController.myTokens");
+		UserDetails currentUser = authenticationService.currentUser();
+		return tokenManager.getUserTokens(currentUser);
 	}
 
 	// Spring annotation virtually equivalent with @RolesAllowed - except for...
@@ -94,8 +99,8 @@ public class MainRestController {
 	// Spring annotation that speaks SpEL!
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping("/secure/allusers")
-	public Map<String, UserContext> allUsers() {
+	public Map<String, UserDetails> allUsers() {
 		System.out.println(" *** MainRestController.allUsers");
-		return authenticationService.getValidUsers(); // DEBUG ONLY!
+		return tokenManager.getValidUsers();
 	}
 }

@@ -1,4 +1,4 @@
-package com.github.virgo47.respsec.main;
+package com.github.virgo47.respsec.main.domain;
 
 import org.springframework.stereotype.Component;
 

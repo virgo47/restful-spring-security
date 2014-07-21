@@ -33,9 +33,9 @@
 		<intercept-url pattern="/secure/**" access="isFullyAuthenticated()"/>
 	</http>
 
-	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.main.security.UnauthorizedEntryPoint"/>
+	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.main.restsec.UnauthorizedEntryPoint"/>
 
-	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.security.MyUseDetailsService"/>
+	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.secimpl.MyUseDetailsService"/>
 
 	<authentication-manager id="restAuthenticationManager">
 		<authentication-provider user-service-ref="userDetailService">
@@ -46,11 +46,11 @@
 		</authentication-provider>
 	</authentication-manager>
 
-	<bean:bean id="tokenManager" class="com.github.virgo47.respsec.main.security.TokenManagerSingle"/>
+	<bean:bean id="tokenManager" class="com.github.virgo47.respsec.main.secimpl.TokenManagerSingle"/>
 
-	<bean:bean id="authenticationService" class="com.github.virgo47.respsec.main.security.AuthenticationServiceImpl"
+	<bean:bean id="authenticationService" class="com.github.virgo47.respsec.main.secimpl.AuthenticationServiceDefault"
 		c:authenticationManager-ref="restAuthenticationManager" c:tokenManager-ref="tokenManager"/>
 
-	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.main.security.MyAuthenticationFilter"
+	<bean:bean id="restAuthenticationFilter" class="com.github.virgo47.respsec.main.restsec.TokenAuthenticationFilter"
 		c:authenticationService-ref="authenticationService" c:logoutLink="/logout"/>
 </bean:beans>

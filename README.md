@@ -1,42 +1,54 @@
 restful-spring-security
 =======================
-
 Small test RESTful app with token based security. Its main reason is documentation for myself. :-) This demo features:
 
 * `@RestController`s in separate MVC application context.
 * Main application context with `@Service`s and Spring Security (also parent for MVC context).
 * Following things are part of the security solution and must be configured:
-	* Security filter `MyAuthenticationFilter` takes care of HTTP and uses `AuthenticationService`
+	* Security filter `TokenAuthenticationFilter` takes care of HTTP and uses `AuthenticationService`
 	  that takes care of the "security business".
 	* `AuthenticationService` that performs the main "security business". It uses Spring's `authenticationManager`
 	  to authenticate users and `TokenManager` implementation that offers variability in policy how tokens should work.
-	  There may b
+	* Solution is separated  into two packages. Package `restsec` contains core if it and may work as a drop-in solution
+	  (adjust stdout debugs, etc). Package `secimpl` is example how `restsec` is glued with the actual application -
+	  here represented by `domain` and `mvc` packages.
 * Gradle build with Spring IO Platform "bill of materials" (but Spring Boot repackage is disabled).
 
 **Demo does not feature any front-end JavaScript. Sorry.** You have to use browser, preferably with something
 like http://restclient.net/ - or even better with `curl` command.
+
+## Diagram!
+
+UML class diagram, yeah! That's what I missed most when I read Spring Security 3.1 book, actually. So hopefully
+you'll like it. If it does not make sense, let me know what's wrong with it.
+
+![UML Class diagram](restful-spring-security-class-uml.png)
+
+## Sources, inspiration
 
 Demo is inspired by internal needs, took a lot of information from Google and StackOverflow - which lead me to:
 https://github.com/philipsorst/angular-rest-springsecurity/
 That project has additional AngularJS and JPA, while I wanted to focus on Spring Security +
 MVC's @RestController only + practice Gradle a bit.
 
-Notes:
+## Notes
 
 * If `context:component-scan` is used in Spring configs, be sure to specify disjoint values for `base-package`.
   You don't want your Controllers to be picked by main appcontext or other way around. Separate JARs don't solve
   this as the resolution (initialization) is performed during runtime.
 * If login is repeated it is important to invalidate older tokens for the same user. Try http://localhost:8080/respsec/secure/mytokens with
   X-Username: admin; X-Password: admin - it should display just a single token. Other policies can be chosen
-  implementing different `TokenManager`, you can store more tokens for a user, let him manage those, etc.
+  implementing different `TokenManager`, you can store more tokens for a user, let him manage those, etc. In such cases tokens
+  may be bound to IP address depending on the needs.
 
-TODO:
+## TODO
 
 * How to invalidate tokens after some time? How to refresh them seamlessly? Should client expect renewed token in any response?
 * How to add more authorization mechanisms? Can we SSO to Windows Domain? Can we integrate something like [Waffle](https://github.com/dblock/waffle)?
-* mytokens
 
-Examples (assuming appserver on 8080 and application context `/respsec`):
+## Examples
+
+Assuming appserver on 8080 and application context `/respsec`:
 
 * Start with login. Don't omit the last / or it will not be intercepted by Spring Security. POST must be used:
 
@@ -69,4 +81,6 @@ Examples (assuming appserver on 8080 and application context `/respsec`):
 
 	`curl -i -w '\n' -H "X-Auth-Token: $X_AUTH_TOKEN" http://localhost:8080/respsec/test` (authenticated user)
 
-See `test.sh` for simple bash-based automatic test. :-)
+## Test
+
+See `test.sh` for simple bash-based automatic test. Never wrote bash test before, but it works for me here. :-)

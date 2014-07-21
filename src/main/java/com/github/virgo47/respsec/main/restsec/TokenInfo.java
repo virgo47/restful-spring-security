@@ -1,4 +1,4 @@
-package com.github.virgo47.respsec.main.security;
+package com.github.virgo47.respsec.main.restsec;
 
 import java.util.Date;
 

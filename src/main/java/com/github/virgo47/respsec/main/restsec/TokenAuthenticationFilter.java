@@ -1,8 +1,4 @@
-package com.github.virgo47.respsec.main.security;
-
-import com.github.virgo47.respsec.AuthenticationService;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+package com.github.virgo47.respsec.main.restsec;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -15,14 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
+
 /**
- * Takes care of request/response pre-processing for login/logout and token check.
+ * Takes care of HTTP request/response pre-processing for login/logout and token check.
  * Login can be performed on any URL, logout only on specified {@link #logoutLink}.
- * {@link SecurityContextHolder} is used only for debug outputs, otherwise this class
- * is configured to be used by Spring Security, but it doesn't import it at all.
- * Other security classes should do "security business" and not care about HTTP.
+ * All the interaction with Spring Security should be performed via {@link AuthenticationService}.
+ * <p>
+ * {@link SecurityContextHolder} is used here only for debug outputs. While this class
+ * is configured to be used by Spring Security (configured filter on FORM_LOGIN_FILTER position),
+ * but it doesn't really depend on it at all.
  */
-public class MyAuthenticationFilter extends GenericFilterBean {
+public final class TokenAuthenticationFilter extends GenericFilterBean {
 
 	private static final String HEADER_TOKEN = "X-Auth-Token";
 	private static final String HEADER_USERNAME = "X-Username";
@@ -34,7 +35,7 @@ public class MyAuthenticationFilter extends GenericFilterBean {
 	private final String logoutLink;
 	private final AuthenticationService authenticationService;
 
-	public MyAuthenticationFilter(AuthenticationService authenticationService, String logoutLink) {
+	public TokenAuthenticationFilter(AuthenticationService authenticationService, String logoutLink) {
 		this.authenticationService = authenticationService;
 		this.logoutLink = logoutLink;
 	}

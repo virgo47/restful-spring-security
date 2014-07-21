@@ -1,14 +1,15 @@
-package com.github.virgo47.respsec.main.security;
-
-import com.github.virgo47.respsec.main.User;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+package com.github.virgo47.respsec.main.secimpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+import com.github.virgo47.respsec.main.domain.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+/** This object wraps {@link User} and makes it {@link UserDetails} so that Spring Security can use it. */
 public class UserContext implements UserDetails {
 
 	private User user;
