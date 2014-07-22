@@ -34,8 +34,8 @@ MVC's @RestController only + practice Gradle a bit.
 ## Notes
 
 * If `context:component-scan` is used in Spring configs, be sure to specify disjoint values for `base-package`.
-  You don't want your Controllers to be picked by main appcontext or other way around. Separate JARs don't solve
-  this as the resolution (initialization) is performed during runtime.
+  You don't want your Controllers to be picked by main appcontext or the other way around. Separate JARs don't solve
+  this because the resolution (initialization) is performed during runtime.
 * If login is repeated it is important to invalidate older tokens for the same user. Try http://localhost:8080/respsec/secure/mytokens with
   X-Username: admin; X-Password: admin - it should display just a single token. Other policies can be chosen
   implementing different `TokenManager`, you can store more tokens for a user, let him manage those, etc. In such cases tokens
