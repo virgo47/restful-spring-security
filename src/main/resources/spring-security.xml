@@ -12,6 +12,9 @@
 	<!--
 	Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
 	Actually, we currently don't need this as we have on annotation outside of MVC.
+	There is more here that can go wrong. If you use interface-based proxy (our demo uses CGLib), you may
+	need to add proxy-target-class="true" as well. Book "Spring Security 3.1", Chapter 10, Fine-grained
+	Access Control, from header "Method security on Spring MVC controllers" on discusses these topics.
 	-->
 	<global-method-security secured-annotations="enabled"/>
 

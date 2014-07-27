@@ -17,10 +17,13 @@ Small test RESTful app with token based security. Its main reason is documentati
 **Demo does not feature any front-end JavaScript. Sorry.** You have to use browser, preferably with something
 like http://restclient.net/ - or even better with `curl` command.
 
+Companion blog post: http://virgo47.wordpress.com/2014/07/27/restful-spring-security-with-authentication-token/
+
 ## Diagram!
 
 UML class diagram, yeah! That's what I missed most when I read Spring Security 3.1 book, actually. So hopefully
-you'll like it. If it does not make sense, let me know what's wrong with it.
+you'll like it. If it does not make sense, let me know what's wrong with it. (BTW, check aforementioned blog post
+for sequence diagrams of login/logout/token check, etc.)
 
 ![UML Class diagram](restful-spring-security-class-uml.png)
 

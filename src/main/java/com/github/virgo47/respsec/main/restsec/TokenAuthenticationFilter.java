@@ -129,10 +129,9 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 	private void checkLogout(HttpServletRequest httpRequest) {
 		if (httpRequest.getServletPath().equals(logoutLink)) {
 			String token = httpRequest.getHeader(HEADER_TOKEN);
-			if (token != null) {
-				authenticationService.logout(token);
-				doNotContinueWithRequestProcessing(httpRequest);
-			}
+			// we go here only authenticated, token must not be null
+			authenticationService.logout(token);
+			doNotContinueWithRequestProcessing(httpRequest);
 		}
 	}
 
