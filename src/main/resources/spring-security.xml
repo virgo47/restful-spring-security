@@ -38,7 +38,7 @@
 
 	<bean:bean id="unauthorizedEntryPoint" class="com.github.virgo47.respsec.main.restsec.UnauthorizedEntryPoint"/>
 
-	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.secimpl.MyUseDetailsService"/>
+	<bean:bean id="userDetailService" class="com.github.virgo47.respsec.main.secimpl.MyUserDetailsService"/>
 
 	<authentication-manager id="restAuthenticationManager">
 		<authentication-provider user-service-ref="userDetailService">

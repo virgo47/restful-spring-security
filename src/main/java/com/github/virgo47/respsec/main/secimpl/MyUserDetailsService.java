@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * Implements Spring Security {@link UserDetailsService} that is injected into authentication provider in configuration XML.
  * It interacts with domain, loads user details and wraps it into {@link UserContext} which implements Spring Security {@link UserDetails}.
  */
-public class MyUseDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserDao userDao;
