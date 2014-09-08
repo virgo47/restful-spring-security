@@ -127,12 +127,21 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 	}
 
 	private void checkLogout(HttpServletRequest httpRequest) {
-		if (httpRequest.getServletPath().equals(logoutLink)) {
+		if (currentLink(httpRequest).equals(logoutLink)) {
 			String token = httpRequest.getHeader(HEADER_TOKEN);
 			// we go here only authenticated, token must not be null
 			authenticationService.logout(token);
 			doNotContinueWithRequestProcessing(httpRequest);
 		}
+	}
+
+	// or use Springs util instead: new UrlPathHelper().getPathWithinApplication(httpRequest)
+	// shame on Servlet API for not providing this without any hassle :-(
+	private String currentLink(HttpServletRequest httpRequest) {
+		if (httpRequest.getPathInfo() == null) {
+			return httpRequest.getServletPath();
+		}
+		return httpRequest.getServletPath() + httpRequest.getPathInfo();
 	}
 
 	/**

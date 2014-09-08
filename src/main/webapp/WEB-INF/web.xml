@@ -8,11 +8,13 @@
 
 	<!-- This points to root application context config files (not to MVC!) -->
 	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+	</context-param>
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			classpath:applicationContext.xml
-			classpath:spring-security.xml
-		</param-value>
+		<!--<param-value>classpath:spring-security.xml</param-value>-->
+		<param-value>com.github.virgo47.respsec.main.AppConfig</param-value>
 	</context-param>
 
 	<!-- This loads the root application context (i.e. service layer and under) -->
