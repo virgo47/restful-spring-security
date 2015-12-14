@@ -13,7 +13,6 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<!--<param-value>classpath:spring-security.xml</param-value>-->
 		<param-value>com.github.virgo47.respsec.main.AppConfig</param-value>
 	</context-param>
 
