@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 /**
  * Service responsible for all around authentication, token checks, etc.
@@ -71,7 +72,7 @@ public class AuthenticationServiceDefault implements AuthenticationService {
 			return false;
 		}
 
-		UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(
+		Authentication securityToken = new PreAuthenticatedAuthenticationToken(
 			userDetails, null, userDetails.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(securityToken);
 
