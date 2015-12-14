@@ -12,7 +12,8 @@ Small test RESTful app with token based security. Its main reason is documentati
 	* Solution is separated  into two packages. Package `restsec` contains core if it and may work as a drop-in solution
 	  (adjust stdout debugs, etc). Package `secimpl` is example how `restsec` is glued with the actual application -
 	  here represented by `domain` and `mvc` packages.
-* Gradle build with Spring IO Platform "bill of materials" (but Spring Boot repackage is disabled).
+* Gradle build based on Spring Boot - just run Gradle task `bootRun` and enjoy
+(e.g. run `test.sh` when it runs).
 
 **Demo does not feature any front-end JavaScript. Sorry.** You have to use browser, preferably with something
 like http://restclient.net/ - or even better with `curl` command.
@@ -36,6 +37,11 @@ MVC's @RestController only + practice Gradle a bit.
 
 ## Notes
 
+* I recently upgraded the demo to Spring Boot 1.3 to avoid the need of running application server.
+  This brought Spring Security 4.x as well, but I didn't convert the XML configuration for Spring
+  Security completely yet. Currently 3 "bash" tests fail, I have to look at it. (/ test is just
+  a regression as we don't have any page there now, two other failures indicate that security
+  annotations are ignored.)
 * If `context:component-scan` is used in Spring configs, be sure to specify disjoint values for `base-package`.
   You don't want your Controllers to be picked by main appcontext or the other way around. Separate JARs don't solve
   this because the resolution (initialization) is performed during runtime.
@@ -48,10 +54,13 @@ MVC's @RestController only + practice Gradle a bit.
 
 * How to invalidate tokens after some time? How to refresh them seamlessly? Should client expect renewed token in any response?
 * How to add more authorization mechanisms? Can we SSO to Windows Domain? Can we integrate something like [Waffle](https://github.com/dblock/waffle)?
+* CSRF (default on in Spring Security 4) is disabled - does it even make sense in our scenario?
+
 
 ## Examples
 
-Assuming appserver on 8080 and application context `/respsec`:
+Assuming you started the boot application (`gradle bootRun`) then the app runs on port
+8080 and root context - and you can try following `curl` commands:
 
 * Start with login. Don't omit the last / or it will not be intercepted by Spring Security. POST must be used:
 
@@ -59,7 +68,7 @@ Assuming appserver on 8080 and application context `/respsec`:
 
     Or to put the token into handy variable:
 
-    ``X_AUTH_TOKEN=`curl -i -X POST -H "X-Username: admin" -H "X-Password: admin" http://loc alhost:8080/respsec/ | grep "X-Auth-Token" | cut -d' ' -f2` && echo $X_AUTH_TOKEN``
+    ``X_AUTH_TOKEN=`curl -i -X POST -H "X-Username: admin" -H "X-Password: admin" http://localhost:8080/respsec/ | grep "X-Auth-Token" | cut -d' ' -f2` && echo $X_AUTH_TOKEN``
 
 * Previous command returns X-Auth-Token, you have to use it in the following example (we can switch to GET now + we're adding new line after the output):
 

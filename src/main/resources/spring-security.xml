@@ -7,7 +7,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
 	<!--
 	Applies to root appContext beans only, for MVC Controllers is this declaration repeated in MVC config.
@@ -23,6 +23,13 @@
 		create-session="stateless"
 		entry-point-ref="unauthorizedEntryPoint"
 		authentication-manager-ref="restAuthenticationManager">
+
+		<!--
+		Added after moving to Spring Boot 1.3 + Spring Security 4.x,
+		otherwise we could not login with basic auth because of: Expected CSRF token not found
+		TODO: Please, mind, that I did not migrate this XML to Spring Security 4.x except for this element
+		-->
+		<csrf disabled="true"/>
 
 		<!--
 		This is not easily possible, because it causes:

@@ -30,7 +30,10 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 	private static final String HEADER_USERNAME = "X-Username";
 	private static final String HEADER_PASSWORD = "X-Password";
 
-	/** Request attribute that indicates that this filter will not continue with the chain. Handy after login/logout, etc. */
+	/**
+	 * Request attribute that indicates that this filter will not continue with the chain.
+	 * Handy after login/logout, etc.
+	 */
 	private static final String REQUEST_ATTR_DO_NOT_CONTINUE = "MyAuthenticationFilter-doNotContinue";
 
 	private final String logoutLink;
@@ -42,7 +45,9 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+		throws IOException, ServletException
+	{
 		System.out.println(" *** MyAuthenticationFilter.doFilter");
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
@@ -51,12 +56,14 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 
 		if (canRequestProcessingContinue(httpRequest) && httpRequest.getMethod().equals("POST")) {
 			// If we're not authenticated, we don't bother with logout at all.
-			// Logout does not work in the same request with login - this does not make sense, because logout works with token and login returns it.
+			// Logout does not work in the same request with login - this does not make sense,
+			// because logout works with token and login returns it.
 			if (authenticated) {
 				checkLogout(httpRequest);
 			}
 
-			// Login works just fine even when we provide token that is valid up to this request, because then we get a new one.
+			// Login works just fine even when we provide token that is valid up to this request,
+			// because then we get a new one.
 			checkLogin(httpRequest, httpResponse);
 		}
 
@@ -116,7 +123,8 @@ public final class TokenAuthenticationFilter extends GenericFilterBean {
 		}
 
 		if (authenticationService.checkToken(token)) {
-			System.out.println(" *** " + HEADER_TOKEN + " valid for: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+			System.out.println(" *** " + HEADER_TOKEN + " valid for: " +
+				SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 			return true;
 		} else {
 			System.out.println(" *** Invalid " + HEADER_TOKEN + ' ' + token);

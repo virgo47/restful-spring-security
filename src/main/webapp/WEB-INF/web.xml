@@ -13,7 +13,7 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>com.github.virgo47.respsec.main.AppConfig</param-value>
+		<param-value>com.github.virgo47.respsec.Main</param-value>
 	</context-param>
 
 	<!-- This loads the root application context (i.e. service layer and under) -->

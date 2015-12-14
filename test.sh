@@ -1,6 +1,6 @@
 #!/bin/bash
 
-URL=http://localhost:8080/respsec
+URL=http://localhost:8080
 CURL="curl -i -s -w '\n'"
 OK='grep -q "200 OK"'
 UNAUTHORIZED='grep -q "401 Unauthorized"'
