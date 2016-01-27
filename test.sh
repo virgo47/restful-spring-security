@@ -60,6 +60,9 @@ X_AUTH_TOKEN=$($CURL -X POST -H "X-Username: special" -H "X-Password: special" $
 echo -n "Special /secure/special 200... "
 $CURL -H "X-Auth-Token: $X_AUTH_TOKEN" $URL/secure/special | eval $OK && ok || fail
 
+echo -n "Special /secure/mytokens 200... "
+$CURL -H "X-Auth-Token: $X_AUTH_TOKEN" $URL/secure/mytokens | eval $OK && ok || fail
+
 echo -n "Special /secure/allusers 403... "
 $CURL -H "X-Auth-Token: $X_AUTH_TOKEN" $URL/secure/allusers | eval $FORBIDDEN && ok || fail
 

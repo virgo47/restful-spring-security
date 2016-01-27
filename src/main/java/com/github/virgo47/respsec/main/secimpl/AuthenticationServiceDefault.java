@@ -92,6 +92,6 @@ public class AuthenticationServiceDefault implements AuthenticationService {
 		if (authentication == null) {
 			return null;
 		}
-		return null;
+		return (UserDetails) authentication.getPrincipal();
 	}
 }
