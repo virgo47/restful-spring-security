@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+		http://www.springframework.org/schema/security/spring-security.xsd">
 
 	<context:component-scan base-package="com.github.virgo47.respsec.mvc"/>
 	<mvc:annotation-driven/>
